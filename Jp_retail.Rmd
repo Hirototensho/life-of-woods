@@ -1,6 +1,7 @@
 ---
 title: "Retail stats in Japan."
-output: html_document
+date: "2019-09-15"
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
