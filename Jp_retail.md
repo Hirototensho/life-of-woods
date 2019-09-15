@@ -2,33 +2,25 @@ Retail stats in Japan.
 ================
 2019-09-15
 
-## R Markdown
+\#\#小売業販売額統計分析レポート
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+情報源：<https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html>
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+\#データの確認
 
-``` r
-summary(cars)
-```
+    ## # A tibble: 1 x 4
+    ##   oldest     lastest      row  ncol
+    ##   <date>     <date>     <int> <int>
+    ## 1 1980-01-01 2019-04-01 13216     5
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+## 販売額の推移
 
-## Including Plots
+![](Jp_retail_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-You can also embed plots, for example:
+![](Jp_retail_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-![](Jp_retail_files/figure-gfm/pressure-1.png)<!-- -->
+![](Jp_retail_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+![](Jp_retail_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+![](Jp_retail_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->

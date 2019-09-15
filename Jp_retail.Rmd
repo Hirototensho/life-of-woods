@@ -3,27 +3,117 @@ title: "Retail stats in Japan."
 date: "2019-09-15"
 output: github_document
 ---
+##小売業販売額統計分析レポート
 
+情報源：https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(lubridate)
+library(tsibble)
+library(feasts)
 ```
 
-## R Markdown
+```{r include=FALSE}
+# 商業動態統計 販売額 単位10億円
+source("Rscript/JPretail.R")
+JPretail
+```
+#データの確認
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+tibble(
+  oldest = pull(JPretail, 年月) %>% head(1),
+  lastest = pull(JPretail, 年月) %>% tail(1),
+  row = JPretail %>% nrow(),
+  ncol = JPretail %>% ncol()
+ ) 
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+```{r}
+JPretail <- 
+  JPretail %>% 
+  filter(大分類 == "小売業" & 小分類 == "小売業計") %>% 
+  select(年月, 販売額)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+```{r paged.print=FALSE}
+JPretail <-
+  JPretail %>% 
+  mutate(年月 = yearmonth(年月))  %>% 
+  as_tsibble(index = 年月)
+```
+
+
+
+
+
+
+
+## 販売額の推移
+
+
+```{r}
+JPretail %>% 
+  autoplot(販売額) +
+  theme_grey(base_family="YuGo-Medium",base_size = 13) 
+```
+
+
+
+```{r}
+JPretail %>% 
+  filter(year(年月) >= 2010) %>%
+  autoplot(販売額) +
+  theme_grey(base_family="YuGo-Medium",base_size = 13) 
+```
+
+
+
+```{r}
+JPretail %>% 
+  gg_season(販売額) +
+  theme_grey(base_family="YuGo-Medium",base_size = 13) 
+  # theme(legend.position = "noun") 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
