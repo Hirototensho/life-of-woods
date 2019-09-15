@@ -4,9 +4,9 @@ date: "2019-09-15"
 output: github_document
 ---
 
-##小売業販売額分析レポート
 
 情報源：https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -22,7 +22,7 @@ source("Rscript/JPretail.R")
 JPretail
 ```
 
-##データの確認
+## Data 
 
 ```{r}
 tibble(

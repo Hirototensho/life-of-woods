@@ -2,11 +2,9 @@ Retail stats in Japan.
 ================
 2019-09-15
 
-\#\#小売業販売額分析レポート
-
 情報源：<https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html>
 
-\#\#データの確認
+## Data
 
     ## # A tibble: 1 x 4
     ##   oldest     lastest      row  ncol
