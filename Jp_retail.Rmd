@@ -3,9 +3,11 @@ title: "Retail stats in Japan."
 date: "2019-09-15"
 output: github_document
 ---
-##小売業販売額統計分析レポート
+
+##小売業販売額分析レポート
 
 情報源：https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
@@ -19,7 +21,8 @@ library(feasts)
 source("Rscript/JPretail.R")
 JPretail
 ```
-#データの確認
+
+##データの確認
 
 ```{r}
 tibble(
@@ -46,17 +49,12 @@ JPretail <-
 ```{r paged.print=FALSE}
 JPretail <-
   JPretail %>% 
-  mutate(年月 = yearmonth(年月))  %>% 
-  as_tsibble(index = 年月)
+  mutate(yearmon = yearmonth(年月))  %>% 
+  as_tsibble(index = yearmon)
 ```
 
 
-
-
-
-
-
-## 販売額の推移
+## 小売業販売額の推移
 
 
 ```{r}
@@ -80,11 +78,17 @@ JPretail %>%
 JPretail %>% 
   gg_season(販売額) +
   theme_grey(base_family="YuGo-Medium",base_size = 13) 
-  # theme(legend.position = "noun") 
 ```
 
 
+## STL decomposition
 
+```{r}
+JPretail %>% 
+  rename(value = 販売額) %>% 
+  STL(value) %>% 
+  autoplot()
+```
 
 
 
