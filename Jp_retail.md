@@ -20,7 +20,3 @@ Retail stats in Japan.
 ![](Jp_retail_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ![](Jp_retail_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
-
-![](Jp_retail_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-
-![](Jp_retail_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
