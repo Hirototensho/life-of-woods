@@ -5,15 +5,13 @@ output: github_document
 ---
 
 
-情報源：https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(lubridate)
 library(tsibble)
 library(feasts)
+library(anomalize)
 ```
 
 ```{r include=FALSE}
@@ -22,81 +20,116 @@ source("Rscript/JPretail.R")
 JPretail
 ```
 
-## Data 
 
 ```{r}
-tibble(
-  oldest = pull(JPretail, 年月) %>% head(1),
-  lastest = pull(JPretail, 年月) %>% tail(1),
-  row = JPretail %>% nrow(),
-  ncol = JPretail %>% ncol()
- ) 
-```
-
-
-
-
-```{r}
-JPretail <- 
-  JPretail %>% 
+JPretail <- JPretail %>% 
   filter(大分類 == "小売業" & 小分類 == "小売業計") %>% 
-  select(年月, 販売額)
-```
+  rename(yearmon = 年月) %>% 
+  select(yearmon, 販売額)
 
 
-
-
-```{r paged.print=FALSE}
-JPretail <-
+JPretail_tsibble <- 
   JPretail %>% 
-  mutate(yearmon = yearmonth(年月))  %>% 
+  mutate(yearmon = yearmonth(yearmon))  %>% 
   as_tsibble(index = yearmon)
 ```
+
+
+
+
+## 概要
+このデータは経済産業省による商業動態統計を参照しています。同統計は1980年1月から毎月公表されており、数値は10億円単位となっています。
+
+
+
+```{r}
+JPretail_tsibble
+```
+
+```{r}
+summary(JPretail_tsibble)
+```
+
+
+
+
 
 
 ## 小売業販売額の推移
 
 
 ```{r}
-JPretail %>% 
+JPretail_tsibble %>% 
   autoplot(販売額) +
   theme_grey(base_family="YuGo-Medium",base_size = 13) 
 ```
 
 
+統計が開始された1980年はバブル期の後期に、90年代半ばにかけて小売業販売額は大きく増加していました。一方で1990年代半ばから2010年代半ばまで停滞と縮小を繰り返し、2010年代半ば以降は再び増加が見られます。
+
 
 ```{r}
-JPretail %>% 
-  filter(year(年月) >= 2010) %>%
+JPretail_tsibble %>% 
+  filter(year(yearmon) >= 2010) %>%
   autoplot(販売額) +
   theme_grey(base_family="YuGo-Medium",base_size = 13) 
 ```
 
+上の図は、2010年以降を取り出したものです。このデータには顕著な季節性変動があり、毎年ほぼ同じ形を維持していますが、2014年3月にはこの波形が乱れています。これは翌月に実施された消費税の増税の影響ではないかと考えられます。
 
+## feasts による季節性変動のグラフ
 
 ```{r}
-JPretail %>% 
+JPretail_tsibble %>% 
   gg_season(販売額) +
+  theme_grey(base_family="YuGo-Medium",base_size = 13) 
+```
+
+
+消費増税の影響は1990年代に行われた3%から5%への増税の際にも見られます。 `feasts` パッケージによる季節性変動にフォーカスしたグラフでも3月のグラフのなかに値がジャンプしている箇所が見られます。
+
+```{r}
+JPretail_tsibble %>% 
+  gg_subseries(販売額) +
   theme_grey(base_family="YuGo-Medium",base_size = 13) 
 ```
 
 
 ## STL decomposition
 
+次に、`feasts::STL()`使用して時系列データを成分毎に分解します。消費増税の影響が remainder として捉えられています。
+
 ```{r}
-JPretail %>% 
+JPretail_tsibble %>% 
   rename(value = 販売額) %>% 
   STL(value) %>% 
   autoplot()
 ```
 
+さらに `anomalize::anomalize()` を使って異常値にマークをつけます。ここでも季節性分解の手法としては STL を用いていま
+す。
+
+```{r message=FALSE}
+JPretail %>% 
+  time_decompose(販売額, method = "stl") %>%
+  anomalize(remainder, method = "iqr") %>% 
+  time_recompose() %>%
+  plot_anomalies(time_recomposed = TRUE, ncol = 3, alpha_dots = 0.5)
+```
 
 
 
+```{r message=FALSE}
+JPretail %>% 
+  time_decompose(販売額, method = "stl") %>%
+  anomalize(remainder, method = "iqr") %>% 
+  time_recompose() %>% 
+  filter(year(yearmon) > 2010) %>% 
+  plot_anomalies(time_recomposed = TRUE, ncol = 3, alpha_dots = 0.5)
+```
 
 
-
-
+出典：[経済産業省 商業動態統計](https://www.meti.go.jp/statistics/tyo/syoudou/result-2/index.html)
 
 
 
