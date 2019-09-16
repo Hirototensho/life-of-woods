@@ -6,7 +6,7 @@ Retail stats in Japan.
 
 このデータは経済産業省による商業動態統計を参照しています。同統計は1980年1月から毎月公表されており、数値は10億円単位となっています。
 
-    ## # A tsibble: 472 x 2 [1M]
+    ## # A tsibble: 475 x 2 [1M]
     ##    yearmon 販売額
     ##      <mth>  <dbl>
     ##  1 1980  1   6396
@@ -19,15 +19,15 @@ Retail stats in Japan.
     ##  8 1980  8   6852
     ##  9 1980  9   6897
     ## 10 1980 10   7270
-    ## # … with 462 more rows
+    ## # … with 465 more rows
 
     ##     yearmon            販売額     
     ##  Min.   :1980  1   Min.   : 6396  
-    ##  1st Qu.:1989 10   1st Qu.:10417  
-    ##  Median :1999  8   Median :11176  
-    ##  Mean   :1999  8   Mean   :10886  
-    ##  3rd Qu.:2009  6   3rd Qu.:11774  
-    ##  Max.   :2019  4   Max.   :15492
+    ##  1st Qu.:1989 11   1st Qu.:10422  
+    ##  Median :1999 10   Median :11191  
+    ##  Mean   :1999 10   Mean   :10893  
+    ##  3rd Qu.:2009  8   3rd Qu.:11778  
+    ##  Max.   :2019  7   Max.   :15492
 
 ## 小売業販売額の推移
 
